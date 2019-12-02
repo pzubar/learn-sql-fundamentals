@@ -4,7 +4,14 @@ import { sql } from '../sql-string';
 /**
  * Columns to select for the `getAllEmployees` query
  */
-const ALL_EMPLOYEES_COLUMNS = ['*'];
+const ALL_EMPLOYEES_COLUMNS = ['id',
+  'firstname',
+  'lastname',
+  'hiredate',
+  'region',
+  'title',
+  'reportsto'
+];
 
 /**
  * Retrieve a collection of all Employee records in the database
@@ -26,9 +33,9 @@ export async function getEmployee(id) {
   const db = await getDb();
   return await db.get(
     sql`
-SELECT *
-FROM Employee
-WHERE id = $1`,
+        SELECT *
+        FROM Employee
+        WHERE id = $1`,
     id
   );
 }
