@@ -33,6 +33,19 @@ import { sql } from '../sql-string';
  */
 const ALL_PRODUCT_COLUMNS = ['*'];
 
+const getFilterQuery = (filter) => {
+  const { inventory = '' } = filter;
+
+  switch (inventory) {
+    case 'discontinued':
+      return `WHERE discontinued = 1`;
+    case 'needs-reorder':
+      return `WHERE discontinued = 0 AND ((unitsinstock + unitsonorder) < reorderlevel)`;
+    default:
+      return '';
+  }
+};
+
 /**
  * Retrieve a collection of all Product records from the database
  * @param {Partial<ProductCollectionOptions>} opts options that may be used to customize the query
@@ -40,9 +53,14 @@ const ALL_PRODUCT_COLUMNS = ['*'];
  */
 export async function getAllProducts(opts = {}) {
   const db = await getDb();
+  const { filter = {} } = opts || {};
+  const filterQuery = getFilterQuery(filter);
+
   return await db.all(sql`
-SELECT ${ALL_PRODUCT_COLUMNS.join(',')}
-FROM Product`);
+    SELECT ${ALL_PRODUCT_COLUMNS.join(',')}
+    FROM Product 
+    ${filterQuery}
+  `);
 }
 
 /**
@@ -60,6 +78,7 @@ WHERE id = $1`,
     id
   );
 }
+
 /**
  * Update the properties of a Product
  * @param {number | string} id Product id
@@ -79,8 +98,9 @@ export async function createProduct(p) {
   let db = await getDb();
   let result = await db.run(
     sql`
-INSERT INTO Product (productname, supplierid, categoryid, quantityperunit, unitprice, unitsinstock, unitsonorder, reorderlevel, discontinued)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        INSERT INTO Product (productname, supplierid, categoryid, quantityperunit, unitprice, unitsinstock,
+                             unitsonorder, reorderlevel, discontinued)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
     p.productname,
     p.supplierid,
     p.categoryid,
@@ -104,7 +124,9 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
  */
 export async function deleteProduct(id) {
   const db = await getDb();
-  await db.run(sql`DELETE FROM Product WHERE id=$1;`, id);
+  await db.run(sql`DELETE
+                   FROM Product
+                   WHERE id = $1;`, id);
 }
 
 /**

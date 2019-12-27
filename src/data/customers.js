@@ -21,10 +21,14 @@ const ALL_CUSTOMERS_COLUMNS = ['id', 'contactname', 'companyname'];
  * @returns {Promise<Customer[]>} A collection of customers
  */
 export async function getAllCustomers(options = {}) {
+  const { filter = '' } = options;
   const db = await getDb();
-  return await db.all(sql`
+  return db.all(sql`
 SELECT ${ALL_CUSTOMERS_COLUMNS.join(',')}
-FROM Customer`);
+FROM Customer
+WHERE lower(companyName) LIKE '%${filter.toLowerCase()}%' 
+OR lower(contactName) LIKE '%${filter.toLowerCase()}%'
+`);
 }
 
 /**
