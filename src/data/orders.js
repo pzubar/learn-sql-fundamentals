@@ -15,6 +15,7 @@ export const ORDER_COLUMNS = ['id',
  * @property {number} perPage Results per page
  * @property {string} sort Property to sort by
  * @property {'asc'|'desc'} order Sort direction
+ * @property {string|undefined} customerId Sort direction
  * @description Options that may be used to customize a query for a collection of CustomerOrder records
  */
 
@@ -27,7 +28,8 @@ const DEFAULT_ORDER_COLLECTION_OPTIONS = Object.freeze(
     order: 'asc',
     page: 1,
     perPage: 20,
-    sort: 'id'
+    sort: 'id',
+    customerId: undefined
   })
 );
 
@@ -42,15 +44,19 @@ export async function getAllOrders(opts = {}) {
   // Combine the options passed into the function with the defaults
 
   /** @type {OrderCollectionOptions} */
-  let options = {
+  const options = {
     ...DEFAULT_ORDER_COLLECTION_OPTIONS,
     ...opts
   };
-
+  const { sort, order, perPage, page, customerId } = options;
+  const orderBy = sql`ORDER BY ${sort} ${order}`;
+  const whereCustomer = customerId ? sql`WHERE customerid = '${customerId}'` : '';
+  const limitQuery = sql`LIMIT ${perPage} OFFSET ${(page - 1) * perPage}`;
   const db = await getDb();
+
   return await db.all(sql`
 SELECT ${ORDER_COLUMNS.join(',')}
-FROM CustomerOrder`);
+FROM CustomerOrder ${whereCustomer} ${orderBy} ${limitQuery}`);
 }
 
 /**
@@ -59,8 +65,7 @@ FROM CustomerOrder`);
  * @param {Partial<OrderCollectionOptions>} opts Options for customizing the query
  */
 export async function getCustomerOrders(customerId, opts = {}) {
-  // ! This is going to retrieve ALL ORDERS, not just the ones that belong to a particular customer. We'll need to fix this
-  return getAllOrders(opts);
+  return getAllOrders({ sort: 'shippeddate', order: 'asc', customerId, ...opts });
 }
 
 /**
@@ -72,9 +77,9 @@ export async function getOrder(id) {
   const db = await getDb();
   return await db.get(
     sql`
-SELECT *
-FROM CustomerOrder
-WHERE id = $1`,
+        SELECT *
+        FROM CustomerOrder
+        WHERE id = $1`,
     id
   );
 }
@@ -88,9 +93,9 @@ export async function getOrderDetails(id) {
   const db = await getDb();
   return await db.all(
     sql`
-SELECT *, unitprice * quantity as price
-FROM OrderDetail
-WHERE orderid = $1`,
+        SELECT *, unitprice * quantity as price
+        FROM OrderDetail
+        WHERE orderid = $1`,
     id
   );
 }

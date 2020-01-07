@@ -55,8 +55,8 @@ class CustomerOrdersPaginationTest {
     );
   }
 
-  @test('If no perPage option is specified, page size is 25')
-  public async pageOf25ByDefault() {
+  @test('If no perPage option is specified, page size is 20')
+  public async pageOf20ByDefault() {
     let firstPageResult = await getCustomerOrders('ANTON');
     assert.isArray(firstPageResult, 'Expected result to be an array');
     assert.equal(firstPageResult.length, 20, 'Expected 20 orders in array');
