@@ -13,7 +13,7 @@ interface ProductFlavorFilter {
 /**
  *  Filtering options that may be used to customize the query for selecting a collection of Products
  */
-interface ProductCollectionFilter {
+export interface ProductCollectionFilter {
   inventory: 'needs-reorder' | 'discontinued';
   requiredTags: string[];
   flavor: ProductFlavorFilter[];

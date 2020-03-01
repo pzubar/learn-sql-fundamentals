@@ -1,4 +1,5 @@
 import { getDb } from '../db/utils';
+import { ProductCollectionFilter } from '../routers/products';
 import { sql } from '../sql-string';
 
 /**
@@ -28,15 +29,19 @@ import { sql } from '../sql-string';
  * @description Options that may be used to customize queries for collections of Products
  */
 
+type Filter = Partial<ProductCollectionFilter>
+
+interface ProductCollectionOptions {
+  filter?: Filter
+}
+
 /**
  * Columns to select for the `getAllProducts` query
  */
-const ALL_PRODUCT_COLUMNS = ['*'];
+const ALL_PRODUCT_COLUMNS = ['p.*'];
 
-const getFilterQuery = (filter) => {
-  const { inventory = '' } = filter;
-
-  switch (inventory) {
+const getFilterQuery = (filter?: Filter) => {
+  switch (filter && filter.inventory) {
     case 'discontinued':
       return `WHERE discontinued = 1`;
     case 'needs-reorder':
@@ -51,14 +56,17 @@ const getFilterQuery = (filter) => {
  * @param {Partial<ProductCollectionOptions>} opts options that may be used to customize the query
  * @returns {Promise<Product[]>} the products
  */
-export async function getAllProducts(opts = {}) {
+export async function getAllProducts(opts?: ProductCollectionOptions) {
   const db = await getDb();
-  const { filter = {} } = opts || {};
+  const filter = opts && opts.filter;
   const filterQuery = getFilterQuery(filter);
 
   return await db.all(sql`
-    SELECT ${ALL_PRODUCT_COLUMNS.join(',')}
-    FROM Product 
+    SELECT ${ALL_PRODUCT_COLUMNS.join(',')},
+      spl.companyname as suppliername, ctg.categoryname as categoryname
+    FROM Product AS p
+    LEFT JOIN Supplier AS spl ON spl.id = p.supplierid
+    LEFT JOIN Category AS ctg ON ctg.id = p.categoryid
     ${filterQuery}
   `);
 }
@@ -73,7 +81,7 @@ export async function getProduct(id) {
   return await db.get(
     sql`
 SELECT ${ALL_PRODUCT_COLUMNS.join(',')}
-FROM Product
+FROM Product as p
 WHERE id = $1`,
     id
   );

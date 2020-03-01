@@ -10,6 +10,7 @@ class OrderJoinTest {
   @test('getOrder() result must now include customername and employeename columns')
   public async getOrderColumnTest() {
     let firstPageResult = await getOrder(10300);
+    console.log(firstPageResult)
     assert.containsAllKeys(firstPageResult, ['customername', 'employeename']);
     assert.ok((firstPageResult as any).customername);
     assert.ok((firstPageResult as any).employeename);
