@@ -1,5 +1,6 @@
 import { getDb } from '../db/utils';
 import { sql } from '../sql-string';
+import or from '../helpers/or';
 
 export const ALL_ORDERS_COLUMNS = ['*'];
 export const ORDER_COLUMNS = ['id AS id',
@@ -84,8 +85,9 @@ export async function getOrder(id) {
   const db = await getDb();
   return await db.get(
     sql`
-      SELECT co.*, c.companyname AS customername,
-             e.firstname || ' ' || e.lastname AS employeename,
+      SELECT co.*,
+             c.companyname                                       AS customername,
+             e.firstname || ' ' || e.lastname                    AS employeename,
              SUM(od.unitprice * od.quantity * (1 - od.discount)) AS subtotal
       FROM CustomerOrder AS co
              LEFT JOIN Customer AS c ON co.customerid = c.id
@@ -106,9 +108,7 @@ export async function getOrderDetails(id) {
   const db = await getDb();
   return await db.all(
     sql`
-      SELECT od.*,
-             od.unitprice * od.quantity AS price,
-             p.productname as productname
+      SELECT od.*, od.unitprice * od.quantity AS price, p.productname as productname
       FROM OrderDetail AS od
              LEFT JOIN Product AS p ON p.id = od.productid
       WHERE orderid = $1`,
@@ -127,14 +127,26 @@ export async function getOrderWithDetails(id) {
   return [order, items];
 }
 
+type CreateOrder = Pick<Order, 'employeeid' | 'customerid' | 'shipcity' | 'shipaddress' | 'shipname' | 'shipvia' | 'shipregion' | 'shipcountry' | 'shippostalcode' | 'requireddate' | 'freight'>
+type CreateOrderDetails = Array<Pick<OrderDetail, 'productid' | 'quantity' | 'unitprice' | 'discount'>>
+
 /**
  * Create a new CustomerOrder record
  * @param {Pick<Order, 'employeeid' | 'customerid' | 'shipcity' | 'shipaddress' | 'shipname' | 'shipvia' | 'shipregion' | 'shipcountry' | 'shippostalcode' | 'requireddate' | 'freight'>} order data for the new CustomerOrder
  * @param {Array<Pick<OrderDetail, 'productid' | 'quantity' | 'unitprice' | 'discount'>>} details data for any OrderDetail records to associate with this new CustomerOrder
  * @returns {Promise<{id: string}>} the newly created order
  */
-export async function createOrder(order, details = []) {
-  return Promise.reject('Orders#createOrder() NOT YET IMPLEMENTED');
+export async function createOrder(order: CreateOrder, details: CreateOrderDetails = []): Promise<{ id: string }> {
+  const db = await getDb();
+  const result = await db.run(
+    sql`
+INSERT INTO CustomerOrder(${Object.keys(order).join(', ')})
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, Object.values(order));
+
+  if (!result || typeof result.lastID === 'undefined') {
+    throw new Error('govno');
+  }
+  return { id: result.lastID };
 }
 
 /**
@@ -143,7 +155,11 @@ export async function createOrder(order, details = []) {
  * @returns {Promise<any>}
  */
 export async function deleteOrder(id) {
-  return Promise.reject('Orders#deleteOrder() NOT YET IMPLEMENTED');
+  const db = await getDb();
+
+  return await db.run(sql`DELETE
+                          FROM OrderDetail
+                          WHERE id = $1`, id);
 }
 
 /**
