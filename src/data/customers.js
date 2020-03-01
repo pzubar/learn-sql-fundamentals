@@ -24,10 +24,12 @@ export async function getAllCustomers(options = {}) {
   const { filter = '' } = options;
   const db = await getDb();
   return db.all(sql`
-SELECT ${ALL_CUSTOMERS_COLUMNS.join(',')}
-FROM Customer
+SELECT ${ALL_CUSTOMERS_COLUMNS.map(x => `c.${x}`).join(',')}, COUNT(c.id) as ordercount
+FROM Customer AS c
+LEFT JOIN CustomerOrder AS co ON co.customerid = c.id
 WHERE lower(companyName) LIKE '%${filter.toLowerCase()}%' 
 OR lower(contactName) LIKE '%${filter.toLowerCase()}%'
+GROUP BY c.id 
 `);
 }
 

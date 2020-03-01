@@ -7,7 +7,7 @@ export const ORDER_COLUMNS = ['id AS id',
   'employeeid',
   'shipcity',
   'shipcountry',
-  'shippeddate'].map(col => `CustomerOrder.${col}`);
+  'shippeddate'];
 
 /**
  * @typedef OrderCollectionOptions
@@ -56,8 +56,8 @@ export async function getAllOrders(opts = {}) {
   const db = await getDb();
 
   return await db.all(sql`
-SELECT ${ORDER_COLUMNS.join(',')},
-  Customer.companyname as customername, Employee.lastname as employeename
+SELECT ${ORDER_COLUMNS.map(col => `CustomerOrder.${col}`).join(',')},
+  Customer.companyname AS customername, Employee.lastname AS employeename
 FROM CustomerOrder
 LEFT JOIN Customer ON Customer.id = customerid
 LEFT JOIN Employee ON Employee.id = employeeid
@@ -85,10 +85,12 @@ export async function getOrder(id) {
   return await db.get(
     sql`
       SELECT co.*, c.companyname AS customername,
-             e.firstname || ' ' || e.lastname AS employeename
+             e.firstname || ' ' || e.lastname AS employeename,
+             SUM(od.unitprice * od.quantity * (1 - od.discount)) AS subtotal
       FROM CustomerOrder AS co
              LEFT JOIN Customer AS c ON co.customerid = c.id
              LEFT JOIN Employee AS e ON co.employeeid = e.id
+             LEFT JOIN OrderDetail AS od ON od.orderid = co.id
       WHERE co.id = $1
     `,
     id
@@ -104,9 +106,11 @@ export async function getOrderDetails(id) {
   const db = await getDb();
   return await db.all(
     sql`
-      SELECT od.*, od.unitprice * od.quantity AS price, p.productname as productname
+      SELECT od.*,
+             od.unitprice * od.quantity AS price,
+             p.productname as productname
       FROM OrderDetail AS od
-             LEFT JOIN Product AS p ON p.id
+             LEFT JOIN Product AS p ON p.id = od.productid
       WHERE orderid = $1`,
     id
   );
