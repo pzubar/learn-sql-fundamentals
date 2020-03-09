@@ -144,7 +144,12 @@ INSERT INTO CustomerOrder(${Object.keys(order).join(', ')})
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, Object.values(order));
 
   if (!result || typeof result.lastID === 'undefined') {
-    throw new Error('govno');
+    throw new Error('Error occurred');
+  }
+  if (details.length) {
+    db.run(
+      sql`
+INSERT INTO OrderDetails(${Object.keys(details).join(', ')})`)
   }
   return { id: result.lastID };
 }
