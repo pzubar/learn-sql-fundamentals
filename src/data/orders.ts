@@ -147,13 +147,14 @@ VALUES (${Object.values(order).map((it, id) => `$${id + 1}`).join(', ')})`, Obje
     throw new Error('Error occurred');
   }
   if (details.length) {
-    details.forEach(detail => db.run(
-      sql`
-INSERT INTO OrderDetail(${['orderid', ...Object.keys(detail)].join(', ')})
-VALUES ($1, ${Object.values(detail).map((it, id) => `$${id + 2}`).join(', ')})`,
-      [result.lastID, ...Object.values(detail)])
+    for (const detail of details) {
+      await db.run(
+        sql`
+INSERT INTO OrderDetail(${['orderid', 'id', ...Object.keys(detail)].join(', ')})
+VALUES ($1, $2, ${Object.values(detail).map((it, id) => `$${id + 3}`).join(', ')})`,
+        [result.lastID, `${result.lastID}/${detail.productid}`, ...Object.values(detail)]);
+    }
   }
-)
   return { id: result.lastID };
 }
 
@@ -166,7 +167,7 @@ export async function deleteOrder(id) {
   const db = await getDb();
 
   return await db.run(sql`DELETE
-                          FROM OrderDetail
+                          FROM CustomerOrder
                           WHERE id = $1`, id);
 }
 
