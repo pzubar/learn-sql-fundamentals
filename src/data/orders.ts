@@ -85,15 +85,15 @@ export async function getOrder(id) {
   const db = await getDb();
   return await db.get(
     sql`
-      SELECT co.*,
-             c.companyname                                       AS customername,
-             e.firstname || ' ' || e.lastname                    AS employeename,
-             SUM(od.unitprice * od.quantity * (1 - od.discount)) AS subtotal
-      FROM CustomerOrder AS co
-             LEFT JOIN Customer AS c ON co.customerid = c.id
-             LEFT JOIN Employee AS e ON co.employeeid = e.id
-             LEFT JOIN OrderDetail AS od ON od.orderid = co.id
-      WHERE co.id = $1
+        SELECT co.*,
+               c.companyname                                       AS customername,
+               e.firstname || ' ' || e.lastname                    AS employeename,
+               SUM(od.unitprice * od.quantity * (1 - od.discount)) AS subtotal
+        FROM CustomerOrder AS co
+                 LEFT JOIN Customer AS c ON co.customerid = c.id
+                 LEFT JOIN Employee AS e ON co.employeeid = e.id
+                 LEFT JOIN OrderDetail AS od ON od.orderid = co.id
+        WHERE co.id = $1
     `,
     id
   );
@@ -108,10 +108,10 @@ export async function getOrderDetails(id) {
   const db = await getDb();
   return await db.all(
     sql`
-      SELECT od.*, od.unitprice * od.quantity AS price, p.productname as productname
-      FROM OrderDetail AS od
-             LEFT JOIN Product AS p ON p.id = od.productid
-      WHERE orderid = $1`,
+        SELECT od.*, od.unitprice * od.quantity AS price, p.productname as productname
+        FROM OrderDetail AS od
+                 LEFT JOIN Product AS p ON p.id = od.productid
+        WHERE orderid = $1`,
     id
   );
 }
@@ -141,16 +141,19 @@ export async function createOrder(order: CreateOrder, details: CreateOrderDetail
   const result = await db.run(
     sql`
 INSERT INTO CustomerOrder(${Object.keys(order).join(', ')})
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, Object.values(order));
+VALUES (${Object.values(order).map((it, id) => `$${id + 1}`).join(', ')})`, Object.values(order));
 
   if (!result || typeof result.lastID === 'undefined') {
     throw new Error('Error occurred');
   }
   if (details.length) {
-    db.run(
+    details.forEach(detail => db.run(
       sql`
-INSERT INTO OrderDetails(${Object.keys(details).join(', ')})`)
+INSERT INTO OrderDetail(${['orderid', ...Object.keys(detail)].join(', ')})
+VALUES ($1, ${Object.values(detail).map((it, id) => `$${id + 2}`).join(', ')})`,
+      [result.lastID, ...Object.values(detail)])
   }
+)
   return { id: result.lastID };
 }
 
