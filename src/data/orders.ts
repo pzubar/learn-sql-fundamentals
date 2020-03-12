@@ -138,24 +138,31 @@ type CreateOrderDetails = Array<Pick<OrderDetail, 'productid' | 'quantity' | 'un
  */
 export async function createOrder(order: CreateOrder, details: CreateOrderDetails = []): Promise<{ id: string }> {
   const db = await getDb();
-  const result = await db.run(
-    sql`
+  await db.run('BEGIN');
+  try {
+    const result = await db.run(
+      sql`
 INSERT INTO CustomerOrder(${Object.keys(order).join(', ')})
 VALUES (${Object.values(order).map((it, id) => `$${id + 1}`).join(', ')})`, Object.values(order));
 
-  if (!result || typeof result.lastID === 'undefined') {
-    throw new Error('Error occurred');
-  }
-  if (details.length) {
-    for (const detail of details) {
-      await db.run(
-        sql`
+    if (!result || typeof result.lastID === 'undefined') {
+      throw new Error('Error occurred');
+    }
+    if (details.length) {
+      for (const detail of details) {
+        await db.run(
+          sql`
 INSERT INTO OrderDetail(${['orderid', 'id', ...Object.keys(detail)].join(', ')})
 VALUES ($1, $2, ${Object.values(detail).map((it, id) => `$${id + 3}`).join(', ')})`,
-        [result.lastID, `${result.lastID}/${detail.productid}`, ...Object.values(detail)]);
+          [result.lastID, `${result.lastID}/${detail.productid}`, ...Object.values(detail)]);
+      }
     }
+    await db.run('COMMIT');
+    return { id: result.lastID };
+  } catch (e) {
+    await db.run('ROLLBACK')
+    throw (e)
   }
-  return { id: result.lastID };
 }
 
 /**
