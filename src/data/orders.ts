@@ -1,6 +1,6 @@
 import { getDb } from '../db/utils';
-import { sql } from '../sql-string';
 import or from '../helpers/or';
+import { sql } from '../sql-string';
 
 export const ALL_ORDERS_COLUMNS = ['*'];
 export const ORDER_COLUMNS = ['id AS id',
@@ -160,8 +160,8 @@ VALUES ($1, $2, ${Object.values(detail).map((it, id) => `$${id + 3}`).join(', ')
     await db.run('COMMIT');
     return { id: result.lastID };
   } catch (e) {
-    await db.run('ROLLBACK')
-    throw (e)
+    await db.run('ROLLBACK');
+    throw (e);
   }
 }
 
@@ -185,6 +185,19 @@ export async function deleteOrder(id) {
  * @param {Array<Pick<OrderDetail, 'id' | 'productid' | 'quantity' | 'unitprice' | 'discount'>>} details data for any OrderDetail records to associate with this new CustomerOrder
  * @returns {Promise<Partial<Order>>} the order
  */
-export async function updateOrder(id, data, details = []) {
-  return Promise.reject('Orders#updateOrder() NOT YET IMPLEMENTED');
+export async function updateOrder(id, data: CreateOrder, details: CreateOrderDetails = []) {
+  const db = await getDb();
+  await db.run('BEGIN');
+  try {
+    await db.run(sql`
+UPDATE CustomerOrder
+SET ${Object.keys(data).map((it, index) => `${it} = $${index + 1}`).join(', ')}
+WHERE id=${id}
+`, ...Object.values(data));
+
+    await db.run(sql`COMMIT`);
+  } catch (e) {
+    await db.run(sql`ROLLBACK`);
+    throw new Error('Error occurred');
+  }
 }
