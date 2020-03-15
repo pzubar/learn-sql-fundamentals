@@ -148,14 +148,12 @@ VALUES (${Object.values(order).map((it, id) => `$${id + 1}`).join(', ')})`, Obje
     if (!result || typeof result.lastID === 'undefined') {
       throw new Error('Error occurred');
     }
-    if (details.length) {
-      for (const detail of details) {
-        await db.run(
-          sql`
+    for (const detail of details) {
+      await db.run(
+        sql`
 INSERT INTO OrderDetail(${['orderid', 'id', ...Object.keys(detail)].join(', ')})
 VALUES ($1, $2, ${Object.values(detail).map((it, id) => `$${id + 3}`).join(', ')})`,
-          [result.lastID, `${result.lastID}/${detail.productid}`, ...Object.values(detail)]);
-      }
+        [result.lastID, `${result.lastID}/${detail.productid}`, ...Object.values(detail)]);
     }
     await db.run('COMMIT');
     return { id: result.lastID };
@@ -178,6 +176,8 @@ export async function deleteOrder(id) {
                           WHERE id = $1`, id);
 }
 
+type UpdateOrderDetails = Pick<OrderDetail, 'id' | 'productid' | 'quantity' | 'unitprice' | 'discount'>
+
 /**
  * Update a CustomerOrder, and its associated OrderDetail records
  * @param {string | number} id CustomerOrder id
@@ -185,17 +185,42 @@ export async function deleteOrder(id) {
  * @param {Array<Pick<OrderDetail, 'id' | 'productid' | 'quantity' | 'unitprice' | 'discount'>>} details data for any OrderDetail records to associate with this new CustomerOrder
  * @returns {Promise<Partial<Order>>} the order
  */
-export async function updateOrder(id, data: CreateOrder, details: CreateOrderDetails = []) {
+export async function updateOrder(id, data: CreateOrder, details: UpdateOrderDetails[] = []) {
   const db = await getDb();
   await db.run('BEGIN');
   try {
-    await db.run(sql`
-UPDATE CustomerOrder
-SET ${Object.keys(data).map((it, index) => `${it} = $${index + 1}`).join(', ')}
-WHERE id=${id}
-`, ...Object.values(data));
+    const result = await db.run(sql`
+        UPDATE CustomerOrder
+        SET ${Object.keys(data).map((it, index) =>
+        `${it} = $${index + 1}`).join(', ')}
+        WHERE id=${id}`,
+      ...Object.values(data)
+    );
+    // tslint:disable-next-line:no-console
+    console.log('RESULT ::: ', result);
+    // tslint:disable-next-line:no-console
+    console.log('DETAILS ::: ', details);
+    if (!result || typeof result.lastID === 'undefined') {
+      throw new Error('Error occurred');
+    }
+
+    await Promise.all(details.map(async (detail) => await db.run(sql`
+                UPDATE OrderDetail
+                SET 'productid' = $1,
+                    'quantity'= $2,
+                    'unitprice' = $3,
+                    'discount'  = $4
+                WHERE id = $5
+      `,
+      detail.productid,
+      detail.quantity,
+      detail.unitprice,
+      detail.discount,
+      detail.id))
+    );
 
     await db.run(sql`COMMIT`);
+    return;
   } catch (e) {
     await db.run(sql`ROLLBACK`);
     throw new Error('Error occurred');
