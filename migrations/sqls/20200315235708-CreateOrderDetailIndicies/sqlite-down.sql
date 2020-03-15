@@ -1,1 +1,2 @@
--- Put your SQLite "down" migration here
+DROP INDEX IF EXISTS orderdetailproductid;
+DROP INDEX IF EXISTS orderdetailorderid;

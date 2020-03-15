@@ -1,2 +1,2 @@
--- Put your SQLite "up" migration here
-CREATE INDEX order_detail_product_order_id ON OrderDetail(productid, orderid)
+CREATE INDEX orderdetailproductid ON OrderDetail(productid);
+CREATE INDEX orderdetailorderid ON OrderDetail(orderid);
