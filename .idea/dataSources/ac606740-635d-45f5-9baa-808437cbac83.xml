@@ -201,401 +201,417 @@
       <Position>14</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <key id="62" parent="10">
+    <index id="62" parent="10" name="ordercustomerid">
+      <ColNames>customerid</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <index id="63" parent="10" name="orderemployeeid">
+      <ColNames>employeeid</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <key id="64" parent="10">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="63" parent="11" name="id">
+    <column id="65" parent="11" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="64" parent="11" name="lastname">
+    <column id="66" parent="11" name="lastname">
       <Position>2</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="65" parent="11" name="firstname">
+    <column id="67" parent="11" name="firstname">
       <Position>3</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="66" parent="11" name="title">
+    <column id="68" parent="11" name="title">
       <Position>4</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="67" parent="11" name="titleofcourtesy">
+    <column id="69" parent="11" name="titleofcourtesy">
       <Position>5</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="68" parent="11" name="birthdate">
+    <column id="70" parent="11" name="birthdate">
       <Position>6</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="69" parent="11" name="hiredate">
+    <column id="71" parent="11" name="hiredate">
       <Position>7</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="70" parent="11" name="address">
+    <column id="72" parent="11" name="address">
       <Position>8</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="71" parent="11" name="city">
+    <column id="73" parent="11" name="city">
       <Position>9</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="72" parent="11" name="region">
+    <column id="74" parent="11" name="region">
       <Position>10</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="73" parent="11" name="postalcode">
+    <column id="75" parent="11" name="postalcode">
       <Position>11</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="74" parent="11" name="country">
+    <column id="76" parent="11" name="country">
       <Position>12</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="75" parent="11" name="homephone">
+    <column id="77" parent="11" name="homephone">
       <Position>13</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="76" parent="11" name="extension">
+    <column id="78" parent="11" name="extension">
       <Position>14</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="77" parent="11" name="photo">
+    <column id="79" parent="11" name="photo">
       <Position>15</Position>
       <DataType>BLOB|0s</DataType>
     </column>
-    <column id="78" parent="11" name="notes">
+    <column id="80" parent="11" name="notes">
       <Position>16</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="79" parent="11" name="reportsto">
+    <column id="81" parent="11" name="reportsto">
       <Position>17</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="80" parent="11" name="photopath">
+    <column id="82" parent="11" name="photopath">
       <Position>18</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <key id="81" parent="11">
+    <index id="83" parent="11" name="employeereportsto">
+      <ColNames>reportsto</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <key id="84" parent="11">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="82" parent="12" name="id">
+    <column id="85" parent="12" name="id">
       <Position>1</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="83" parent="12" name="employeeid">
+    <column id="86" parent="12" name="employeeid">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="84" parent="12" name="territoryid">
+    <column id="87" parent="12" name="territoryid">
       <Position>3</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <index id="85" parent="12" name="sqlite_autoindex_EmployeeTerritory_1">
+    <index id="88" parent="12" name="sqlite_autoindex_EmployeeTerritory_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="86" parent="12">
+    <key id="89" parent="12">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_EmployeeTerritory_1</UnderlyingIndexName>
     </key>
-    <column id="87" parent="13" name="id">
+    <column id="90" parent="13" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="88" parent="13" name="name">
+    <column id="91" parent="13" name="name">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="89" parent="13">
+    <key id="92" parent="13">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="90" parent="14" name="id">
+    <column id="93" parent="14" name="id">
       <Position>1</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="91" parent="14" name="orderid">
+    <column id="94" parent="14" name="orderid">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="92" parent="14" name="productid">
+    <column id="95" parent="14" name="productid">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="93" parent="14" name="unitprice">
+    <column id="96" parent="14" name="unitprice">
       <Position>4</Position>
       <DataType>DECIMAL|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="94" parent="14" name="quantity">
+    <column id="97" parent="14" name="quantity">
       <Position>5</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="95" parent="14" name="discount">
+    <column id="98" parent="14" name="discount">
       <Position>6</Position>
       <DataType>DOUBLE|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="96" parent="14" name="sqlite_autoindex_OrderDetail_1">
+    <index id="99" parent="14" name="sqlite_autoindex_OrderDetail_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="97" parent="14" name="orderdetailorderid">
+    <index id="100" parent="14" name="orderdetailorderid">
       <ColNames>orderid</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="98" parent="14" name="orderdetailproductid">
+    <index id="101" parent="14" name="orderdetailproductid">
       <ColNames>productid</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="99" parent="14">
+    <key id="102" parent="14">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_OrderDetail_1</UnderlyingIndexName>
     </key>
-    <column id="100" parent="15" name="id">
+    <column id="103" parent="15" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="101" parent="15" name="productname">
+    <column id="104" parent="15" name="productname">
       <Position>2</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="102" parent="15" name="supplierid">
+    <column id="105" parent="15" name="supplierid">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="103" parent="15" name="categoryid">
+    <column id="106" parent="15" name="categoryid">
       <Position>4</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="104" parent="15" name="quantityperunit">
+    <column id="107" parent="15" name="quantityperunit">
       <Position>5</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="105" parent="15" name="unitprice">
+    <column id="108" parent="15" name="unitprice">
       <Position>6</Position>
       <DataType>DECIMAL|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="106" parent="15" name="unitsinstock">
+    <column id="109" parent="15" name="unitsinstock">
       <Position>7</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="107" parent="15" name="unitsonorder">
+    <column id="110" parent="15" name="unitsonorder">
       <Position>8</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="108" parent="15" name="reorderlevel">
+    <column id="111" parent="15" name="reorderlevel">
       <Position>9</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="109" parent="15" name="discontinued">
+    <column id="112" parent="15" name="discontinued">
       <Position>10</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="110" parent="15">
+    <index id="113" parent="15" name="productsupplierid">
+      <ColNames>supplierid</ColNames>
+      <ColumnCollations></ColumnCollations>
+    </index>
+    <key id="114" parent="15">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="111" parent="16" name="id">
+    <column id="115" parent="16" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="112" parent="16" name="regiondescription">
+    <column id="116" parent="16" name="regiondescription">
       <Position>2</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <key id="113" parent="16">
+    <key id="117" parent="16">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="114" parent="17" name="id">
+    <column id="118" parent="17" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="115" parent="17" name="companyname">
+    <column id="119" parent="17" name="companyname">
       <Position>2</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="116" parent="17" name="phone">
+    <column id="120" parent="17" name="phone">
       <Position>3</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <key id="117" parent="17">
+    <key id="121" parent="17">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="118" parent="18" name="id">
+    <column id="122" parent="18" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="119" parent="18" name="companyname">
+    <column id="123" parent="18" name="companyname">
       <Position>2</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="120" parent="18" name="contactname">
+    <column id="124" parent="18" name="contactname">
       <Position>3</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="121" parent="18" name="contacttitle">
+    <column id="125" parent="18" name="contacttitle">
       <Position>4</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="122" parent="18" name="address">
+    <column id="126" parent="18" name="address">
       <Position>5</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="123" parent="18" name="city">
+    <column id="127" parent="18" name="city">
       <Position>6</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="124" parent="18" name="region">
+    <column id="128" parent="18" name="region">
       <Position>7</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="125" parent="18" name="postalcode">
+    <column id="129" parent="18" name="postalcode">
       <Position>8</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="126" parent="18" name="country">
+    <column id="130" parent="18" name="country">
       <Position>9</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="127" parent="18" name="phone">
+    <column id="131" parent="18" name="phone">
       <Position>10</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="128" parent="18" name="fax">
+    <column id="132" parent="18" name="fax">
       <Position>11</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="129" parent="18" name="homepage">
+    <column id="133" parent="18" name="homepage">
       <Position>12</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <key id="130" parent="18">
+    <key id="134" parent="18">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="131" parent="19" name="id">
+    <column id="135" parent="19" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="132" parent="19" name="name">
+    <column id="136" parent="19" name="name">
       <Position>2</Position>
       <DataType>VARCHAR(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="133" parent="19" name="run_on">
+    <column id="137" parent="19" name="run_on">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="134" parent="19">
+    <key id="138" parent="19">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="135" parent="20" name="type">
+    <column id="139" parent="20" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="136" parent="20" name="name">
+    <column id="140" parent="20" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="137" parent="20" name="tbl_name">
+    <column id="141" parent="20" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="138" parent="20" name="rootpage">
+    <column id="142" parent="20" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="139" parent="20" name="sql">
+    <column id="143" parent="20" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="140" parent="21" name="name">
+    <column id="144" parent="21" name="name">
       <Position>1</Position>
     </column>
-    <column id="141" parent="21" name="seq">
+    <column id="145" parent="21" name="seq">
       <Position>2</Position>
     </column>
-    <column id="142" parent="22" name="id">
+    <column id="146" parent="22" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="143" parent="22" name="productname">
+    <column id="147" parent="22" name="productname">
       <Position>2</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="144" parent="22" name="supplierid">
+    <column id="148" parent="22" name="supplierid">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="145" parent="22" name="categoryid">
+    <column id="149" parent="22" name="categoryid">
       <Position>4</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="146" parent="22" name="quantityperunit">
+    <column id="150" parent="22" name="quantityperunit">
       <Position>5</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="147" parent="22" name="unitprice">
+    <column id="151" parent="22" name="unitprice">
       <Position>6</Position>
       <DataType>DECIMAL|0s</DataType>
     </column>
-    <column id="148" parent="22" name="unitsinstock">
+    <column id="152" parent="22" name="unitsinstock">
       <Position>7</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="149" parent="22" name="unitsonorder">
+    <column id="153" parent="22" name="unitsonorder">
       <Position>8</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="150" parent="22" name="reorderlevel">
+    <column id="154" parent="22" name="reorderlevel">
       <Position>9</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="151" parent="22" name="discontinued">
+    <column id="155" parent="22" name="discontinued">
       <Position>10</Position>
       <DataType>INTEGER|0s</DataType>
     </column>
-    <column id="152" parent="22" name="categoryname">
+    <column id="156" parent="22" name="categoryname">
       <Position>11</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="153" parent="22" name="categorydescription">
+    <column id="157" parent="22" name="categorydescription">
       <Position>12</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="154" parent="22" name="suppliername">
+    <column id="158" parent="22" name="suppliername">
       <Position>13</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>
-    <column id="155" parent="22" name="supplierregion">
+    <column id="159" parent="22" name="supplierregion">
       <Position>14</Position>
       <DataType>VARCHAR(8000)|0s</DataType>
     </column>

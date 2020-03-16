@@ -18,9 +18,11 @@ class SupplierProductListTest {
   public async productListIsCorrect() {
     let [supplierResult] = await getAllSuppliers();
     let allProducts = await getAllProducts();
+    // console.log(allProducts);
+    console.log(supplierResult.productlist);
     let productsString = allProducts
       .filter(p => p.supplierid === supplierResult.id)
-      .map(p => p.productname)
+      .map(p => console.log(p.productname) || p.productname)
       .sort()
       .join(', ');
 
