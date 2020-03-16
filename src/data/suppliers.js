@@ -16,8 +16,8 @@ export async function getAllSuppliers() {
 SELECT ${ALL_SUPPLIERS_COLUMNS.map(x => `s.${x}`).join(',')},
 group_concat(p.productname, ', ') as productlist
 FROM Supplier AS s
-LEFT JOIN Product AS p ON p.supplierid = s.id
-GROUP BY p.supplierid`);
+LEFT JOIN (SELECT * FROM Product ORDER BY productname DESC) AS p ON p.supplierid = s.id
+GROUP BY s.id`);
 }
 
 /**
